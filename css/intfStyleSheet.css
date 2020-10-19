@@ -1,0 +1,140 @@
+#headerTop,
+#subheaderTop,
+#newPackageForm {
+    text-align: center;
+    margin-bottom: 4%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+
+/*With a width of 50% and floating them left (or right) you get a Form with 2 columns of equal size*/
+
+#columnForm {
+    width: 50%;
+    float: left;
+}
+
+
+/*We position the form box in the middle of the screen occupying 60% of it*/
+
+#newPackageForm {
+    display: none;
+    width: 60%;
+    margin-right: 20%;
+    margin-left: 20%;
+    background-color: lightgray;
+    padding: 12px;
+    border-radius: 5px;
+    /*box-shadow: h-offset v-offset blurRadius spreadRadius color inset initial inhert;*/
+    box-shadow: 2px 2px 4px darkgray;
+}
+
+
+/*Inputs that instead of being a box are only a bottom line, 90% width to make them wide but not touch each other between columns*/
+
+input {
+    width: 90%;
+    padding: 12px;
+    margin: 8px;
+    box-sizing: border-box;
+    border: none;
+    background-color: lightgray;
+    border-bottom: 2px solid gray;
+}
+
+
+/*So that when you write into an input field the box around it doesn't appear*/
+
+input:focus {
+    outline: none;
+}
+
+
+/*With a widht of 95% this button ends at the same time the inputs do*/
+
+#btnSubmit {
+    width: 95%;
+    border: none;
+    padding: 12px;
+    margin: 8px;
+    color: white;
+    background-color: darkslategray;
+    cursor: pointer;
+    outline: none
+}
+
+
+/*So the navbar at the top matches the aethetics of the page*/
+
+.navbar-custom {
+    color: white;
+    background-color: darkslategray;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+
+/*Without it collapsed panel immediately disappears*/
+
+.navbar-collapse.collapse.in {
+    display: inline-block;
+}
+
+
+/*Colors of toggler of collapsing*/
+
+.custom-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.custom-toggler.navbar-toggler {
+    border-color: white
+}
+
+
+/*So the footer takes less space*/
+
+p {
+    padding: 0;
+    margin: 0;
+}
+
+
+/*Navbar options are white/silver when hovered*/
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: silver
+}
+
+
+/*Basically a footer at the bottom of the page*/
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: darkslategray;
+    color: white;
+    text-align: center;
+    font-size: 0.7em;
+}
+
+
+/*The map occupies the whole screen and is between the navbar and footer*/
+
+#mapid {
+    position: absolute;
+    top: 55px;
+    bottom: 33px;
+    width: 100%;
+    z-index: -1;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+}
