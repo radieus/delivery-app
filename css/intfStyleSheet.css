@@ -14,11 +14,10 @@
     float: left;
 }
 
-
 /*We position the form box in the middle of the screen occupying 60% of it*/
 
 #newPackageForm {
-    display: none;
+    display: block;
     width: 60%;
     margin-right: 20%;
     margin-left: 20%;
@@ -137,4 +136,11 @@ a:hover {
 .wrapper {
     display: flex;
     width: 100%;
+}
+
+
+.popupCustom .leaflet-popup-tip,
+.popupCustom .leaflet-popup-content-wrapper {
+    background: #e0e0e0;
+    color: #234c5e;
 }
