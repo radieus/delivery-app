@@ -8,36 +8,53 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     accessToken: 'pk.eyJ1IjoicmFkaWV1cyIsImEiOiJja2dmNjNneTAwdWxwMnZxejY1aGRkdm03In0.FS9_5BuYbcxDQWSTseVO3A'
 }).addTo(mymap);
 
-var template = '<form data-persist="garlic">\
-    <input type="text" id="Ifrom" name="Ifrom" placeholder="Pickup Address"required><br>\
-    <input type="text" id="Ito" name="Ito" placeholder="Destination Address" required><br>\
-    <input type="date" id="IDate" name="IDate" placeholder="Date" required><br>\
+var template = '<form data-persist="garlic" action="#" onsubmit="addPoint(); return false">\
+    <input type="text" id="Ifrom" name="Ifrom" placeholder="Pickup Address" required><br>\
+    <input type="text" id="Ito" name="Ito" placeholder="Destination Address" ><br>\
+    <input type="date" id="IDate" name="IDate" placeholder="Date" ><br>\
     <input type="text" id="Itext" name="Itext" placeholder="Details"><br>\
-    <input type="text" id="Iname" name="Iname" placeholder="Name" required><br>\
-    <input type="text" id="Isurname" name="Isurname" placeholder="Surame" required><br>\
-    <input type="email" id="Imail" name="Imail" placeholder="Email" required><br>\
-    <input type="tel" id="Iphone" name="Iphone" placeholder="Phone" required>\
-<button id="btnSubmit">Submit</button>\
-</form>'
+    <input type="text" id="Iname" name="Iname" placeholder="Name" ><br>\
+    <input type="text" id="Isurname" name="Isurname" placeholder="Surame" ><br>\
+    <input type="email" id="Imail" name="Imail" placeholder="Email" ><br>\
+    <input type="tel" id="Iphone" name="Iphone" placeholder="Phone" >\
+<button type="submit" id="btnSubmit">Submit</button>\
+</form>';
 
-var markerArray = [];
+var markers = L.layerGroup();
+
+var tmpMarker;
 
 function onMapClick(e) {
-    var marker = L.marker(e.latlng).addTo(mymap);
-    markerArray.push(marker)
-    marker.bindPopup(template, {
+    if (tmpMarker) {
+        mymap.removeLayer(tmpMarker);
+    }
+    
+    tmpMarker = L.marker(e.latlng, {
+        draggable: true
+    }).addTo(mymap);
+
+    markers.addLayer(tmpMarker);
+    
+    tmpMarker.bindPopup(template, {
         maxWidth: "auto"
-      });
-      marker.openPopup;
+        });
+
+    tmpMarker.openPopup();
+
+    tmpMarker.on('dragend', function(event){
+        var marker = event.target;
+        tmpMarker.openPopup();
+    });
+
+
 }
 
-function showNewPackageForm() {
-    var displayStyle = document.getElementById('newPackageForm').style.display;
-    if (displayStyle == "block") {
-        document.getElementById('newPackageForm').style.display = "none";
-    } else {
-        document.getElementById('newPackageForm').style.display = "block";
-    }
+
+function addPoint() {
+    tmpMarker.closePopup();
+    markers.addLayer(tmpMarker);
+    tmpMarker = null;
+    console.log("Add point")
 }
 
 mymap.on('click', onMapClick);
