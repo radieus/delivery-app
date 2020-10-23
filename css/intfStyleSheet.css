@@ -31,7 +31,7 @@
 
 /*Inputs that instead of being a box are only a bottom line, 90% width to make them wide but not touch each other between columns*/
 
-input {
+input, select {
     width: 95%;
     padding: 5px;
     margin: 3px;
