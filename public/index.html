@@ -21,6 +21,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@2.5.0/dist/esri-leaflet.js"
+    integrity="sha512-ucw7Grpc+iEQZa711gcjgMBnmd9qju1CICsRaryvX7HJklK0pGl/prxKvtHwpgm5ZHdvAil7YPxI1oWPOWK3UQ=="
+    crossorigin=""></script>
+
+    <!-- Load Esri Leaflet Geocoder from CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.css"
+    integrity="sha512-IM3Hs+feyi40yZhDH6kV8vQMg4Fh20s9OzInIIAc4nx7aMYMfo+IenRUekoYsHZqGkREUgx0VvlEsgm7nCDW9g=="
+    crossorigin="">
+    <script src="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.js"
+    integrity="sha512-HrFUyCEtIpxZloTgEKKMq4RFYhxjJkCiF5sDxuAokklOeZ68U2NPfh4MFtyIVWlsKtVbK5GD2/JzFyAfvT5ejA=="
+    crossorigin=""></script>
     
 </head>
 
@@ -29,7 +42,7 @@
     <nav class="navbar navbar-default navbar-custom">
         <div class="container-fluid">
             <a class="navbar-brand">
-                <img src="icon.svg" width="30" height="30" class="d-inline-block align-top" alt=""> Package Handling Web App
+                <img src="/ico/icon.svg" width="30" height="30" class="d-inline-block align-top" alt=""> Package Handling Web App
             </a>
 
             <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,12 +64,37 @@
 
     <!--Map goes there-->
     <div id="mapid"></div>
-    <script src="js/map.js"></script><br>
+    <!--The div which holds the packages goes here-->
+    <div id="packagesDiv">'
+        <form id="fixedForm">
+            <div class="columnForm">
+                <input type="text" class="inputHalf" id="IcountryF" name="IcountryF" placeholder="Country"required>
+                <input type="text" class="inputHalf" id="IcityF" name="IcityF" placeholder="City"required><br>
+                <input type="text" id="Ifrom" name="Ifrom" placeholder="Origin Address" required><br>
+                <input type="text" id="PCfrom" name="PCfrom" placeholder="PC" required><br>
+                <input type="date" id="Idate" name="IDate" placeholder="Date" required><br>
+                <input type="text" id="Itext" name="Itext" placeholder="Details"><br>
+                <input type="tel" id="Iphone" name="Iphone" placeholder="Phone" required>
+            </div>
+            <div class="columnForm">
+                <input type="text" class="inputHalf" id="IcountryD" name="IcountryD" placeholder="Country"required>
+                <input type="text" class="inputHalf" id="IcityD" name="IcityD" placeholder="City"required><br>
+                <input type="text" id="Ito" name="Ito" placeholder="Destination Address" required><br>
+                <input type="text" id="PCto" name="PCto" placeholder="PC" required><br>
+                <input type="text" id="Iname" name="Iname" placeholder="Name" required><br>
+                <input type="text" id="Isurname" name="Isurname" placeholder="Surame" required><br>
+                <input type="email" id="Imail" name="Imail" placeholder="Email" required><br>
+            </div>
+            <button id="btnSubmit" type="submit" >Submit</button>
+        </form>
+    </div>
     <!--Footer-->
     <div class="footer">
         <p>© 2020 Copyright</p>
         <p>Daniel Brito & Radosław Dubiel</p>
     </div>
-</body>
 
+    <script src="js/map.js"></script><br>
+
+</body>
 </html>
