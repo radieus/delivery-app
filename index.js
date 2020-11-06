@@ -11,7 +11,7 @@ app.use(express.static('public'));
 app.use(express.json());
 
 points = [];
-myId = uuidv4();
+//myId = uuidv4();
 
 app.post('/api', (req, res) => {
     points.push(req.body);
@@ -19,12 +19,7 @@ app.post('/api', (req, res) => {
     res.json('success');
 });
 
-app.get('/api/delivery/:id', (req, res) => {
-    var id = req.params.id;
-    // send a response to user based on id
-    var obj = { id : id, Content : "content " +id };
-
-    response.writeHead(200, {"Content-Type": "application/json"});
-    response.write(JSON.stringify(obj));
+app.get('/api/delivery/', (req, res) => {
+   
 })
 
