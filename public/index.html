@@ -52,7 +52,7 @@
             <div class="collapse navbar-collapse" id="navbarsExample01">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#" onclick="showNewPackageForm()">Add new package<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Add new package<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Edit existing package</a>
@@ -65,15 +65,17 @@
     <!--Map goes there-->
     <div id="mapid"></div>
     <!--The div which holds the packages goes here-->
-    <div id="packagesDiv">
-        <button id="geocodeOrigin" type="button">Geocode Origin</button><br>
-        <button id="geocodeDest" type="button">Geocode Destination</button><br>
-        <form id="fixedForm">
+    <div id="packagesDiv" class="shadow-lg p-3 mb-5 rounded">
+        <div id="geoForm">
+            <button id="geocodeOrigin" type="button">Geocode Origin</button><br>
+            <button id="geocodeDest" type="button">Geocode Destination</button><br>
+        </div>
+        <form id="fixedForm" class="shadow-lg p-3 mb-5 rounded">
             <div class="columnForm">
                 <input type="text" class="inputHalf" id="IcountryF" name="IcountryF" placeholder="Country"required>
                 <input type="text" class="inputHalf" id="IcityF" name="IcityF" placeholder="City"required><br>
-                <input type="text" id="Ifrom" name="Ifrom" placeholder="Origin Address" required><br>
-                <input type="text" id="PCfrom" name="PCfrom" placeholder="PC" required><br>
+                <input type="text" id="Ifrom" name="Ifrom" placeholder="Address from" required><br>
+                <input type="text" id="PCfrom" name="PCfrom" placeholder="ZIP" required><br>
                 <input type="date" id="Idate" name="IDate" placeholder="Date" required><br>
                 <input type="text" id="Itext" name="Itext" placeholder="Details"><br>
                 <input type="tel" id="Iphone" name="Iphone" placeholder="Phone" required>
@@ -81,13 +83,14 @@
             <div class="columnForm">
                 <input type="text" class="inputHalf" id="IcountryD" name="IcountryD" placeholder="Country"required>
                 <input type="text" class="inputHalf" id="IcityD" name="IcityD" placeholder="City"required><br>
-                <input type="text" id="Ito" name="Ito" placeholder="Destination Address" required><br>
-                <input type="text" id="PCto" name="PCto" placeholder="PC" required><br>
+                <input type="text" id="Ito" name="Ito" placeholder="Address to" required><br>
+                <input type="text" id="PCto" name="PCto" placeholder="ZIP" required><br>
                 <input type="text" id="Iname" name="Iname" placeholder="Name" required><br>
                 <input type="text" id="Isurname" name="Isurname" placeholder="Surame" required><br>
                 <input type="email" id="Imail" name="Imail" placeholder="Email" required><br>
             </div>
             <button id="btnSubmit" type="submit" >Submit</button>
+            <button id="btnUpdate" type="submit" >Update</button>
         </form>
     </div>
 

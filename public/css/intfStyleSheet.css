@@ -75,7 +75,8 @@ input:focus {
 
 /*With a widht of 95% this button ends at the same time the inputs do*/
 
-#btnSubmit, #geocodeOrigin, #geocodeDest{
+#btnSubmit, #btnUpdate, #geocodeOrigin, #geocodeDest{
+    display: inline-block;
     width: 95%;
     border: none;
     padding: 12px;
@@ -83,9 +84,16 @@ input:focus {
     color: white;
     background-color: darkslategray;
     cursor: pointer;
-    outline: none
+    outline: none;
 }
 
+#btnSubmit:hover, #btnUpdate:hover, #geocodeOrigin:hover, #geocodeDest:hover {
+    background-color:	#4F2F42;
+}
+
+#btnSubmit:active, #btnUpdate:active, #geocodeOrigin:active, #geocodeDest:active {
+    background-color: darkslategray;
+}
 
 /*So the navbar at the top matches the aethetics of the page*/
 
@@ -150,21 +158,23 @@ a:hover {
 /*The map occupies the whole screen and is between the navbar and footer*/
 
 #mapid {
-    width: 50%;
+    width: 60%;
     position: absolute;
     top: 55px;
     bottom: 33px;
     z-index: -1;
 }
 #packagesDiv{
-    width: 50%;
+    width: 40%;
     float: right;
     top: 55px;
     bottom: 33px;
     z-index: -1;
+    background-color: #779B9B;
+    height: 876px;
 }
 
-#fixedForm{
+#fixedForm, #geoForm{
     display: block;
     width: 90%;
     margin-right: 5%;
@@ -174,6 +184,7 @@ a:hover {
     border-radius: 5px;
     /*box-shadow: h-offset v-offset blurRadius spreadRadius color inset initial inhert;*/
     box-shadow: 2px 2px 4px darkgray;
+    margin-top: 10px;
 }
 
 .wrapper {

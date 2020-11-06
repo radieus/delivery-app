@@ -1,5 +1,6 @@
 var btnOr = document.getElementById("geocodeOrigin");
 var btnDst = document.getElementById("geocodeDest");
+var btnUpdate = document.getElementById("btnUpdate");
 
 var map = L.map('mapid').setView([52.22992817667709, 21.00809365510941], 13);
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -17,6 +18,7 @@ var markerArray = [];
 var nMarkers = 0;
 var pointFrom;
 var pointTo;
+var packageId;
 
 function onMapClick(e) {
     
@@ -91,21 +93,11 @@ function getReverseGeocodingData(lat, lng) {
         }
         // This is checking to see if the Geoeode Status is OK before proceeding
         if (status == google.maps.GeocoderStatus.OK) {
-            console.log(results);
             var address = (results[0].formatted_address);
             var addrInput = document.getElementById("Ifrom");
             addrInput.value = address;
         }
     });
-}
-
-function showNewPackageForm() {
-    var displayStyle = document.getElementById('newPackageForm').style.display;
-    if (displayStyle == "block") {
-        document.getElementById('newPackageForm').style.display = "none";
-    } else {
-        document.getElementById('newPackageForm').style.display = "block";
-    }
 }
 
 function clearForm() {
@@ -172,7 +164,6 @@ function geocodeOriginBtn(){
                     }
                 });
             });
-        //TO GET LATLNG DO results.results[0].latlng
         }
       });
 }
@@ -224,11 +215,9 @@ function geocodeDestBtn(){
                     }
                 });
             });
-
-        }//TO GET LATLNG DO results.results[0].latlng
-      });
+        }
+    });
 }
-
 
 document.getElementById("fixedForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -246,9 +235,11 @@ document.getElementById("fixedForm").addEventListener("submit", (e) => {
     var destinationAddress = document.getElementById('Ito').value;
     var surname = document.getElementById('Isurname').value;
     var name = document.getElementById('Iname').value;
-    var mail = document.getElementById('Imail').value
+    var mail = document.getElementById('Imail').value;
+    var destinationLatlng = markerArray[0]._latlng;
+    var originLatlng = markerArray[1]._latlng;
 
-    data = {countryFrom, cityFrom, postCodeFrom, originAddress, date, details, phone, countryTo, countryFrom, cityTo, postCodeTo, destinationAddress, surname, name, mail}
+    data = {countryFrom, cityFrom, postCodeFrom, originAddress, originLatlng, date, details, phone, countryTo, countryFrom, cityTo, postCodeTo, destinationAddress, destinationLatlng, surname, name, mail}
 
     options = {
         method: 'POST',
@@ -265,18 +256,162 @@ document.getElementById("fixedForm").addEventListener("submit", (e) => {
             if (response.ok) {
                 console.log("OK");
                 clearForm();
-                nMarkers = 0;
             }
             return response.json();
         }).then((data) => {
             console.log(data);
+            if (data) {
+                //updateDeliveries(data);
+            }
         }).catch(error => {
             console.log(error);
         });
-
 });
+
+function updateDeliveries(data) {
+
+    markerArray = [];
+
+    if (data) {
+        var markerD = L.marker(L.latLng(
+            parseFloat(data.destinationLatlng.lat),
+            parseFloat(data.destinationLatlng.lng)
+        ), {
+            draggable:true,
+            title:"Resource location",
+            alt:"Resource Location",
+            riseOnHover:true
+            }).on('click', markerOnClick)
+            .addTo(map);
+            //.bindPopup(data.destinationLatlng).openPopup();
+
+        // #12 : Update marker popup content on changing it's position
+        markerD.on("dragend",function(e){
+            geocodeService.reverse().latlng(e.target.getLatLng()).run(function (error, res) {
+                markerD.bindPopup(e.target.getLatLng().toString()).openPopup();
+                if (markerD == markerArray[0]){
+                    document.getElementById("IcountryD").value = res.address.CountryCode;
+                    document.getElementById("IcityD").value = res.address.City;
+                    document.getElementById("Ito").value = res.address.Address;
+                    document.getElementById("PCto").value = res.address.Postal;
+                } else {
+                    document.getElementById("IcountryF").value = res.address.CountryCode;
+                    document.getElementById("IcityF").value = res.address.City;
+                    document.getElementById("Ifrom").value = res.address.Address;
+                    document.getElementById("PCfrom").value = res.address.Postal;
+                }
+            });
+        });
+
+        markerArray.push(markerD)
+
+        var markerO = L.marker(L.latLng(
+            parseFloat(data.originLatlng.lat),
+            parseFloat(data.originLatlng.lng)
+        ), {
+            draggable:true,
+            title:"Resource location",
+            alt:"Resource Location",
+            riseOnHover:true
+            }).on('click', markerOnClick)
+            .addTo(map);
+            //.bindPopup(data.originLatlng).openPopup();
+
+        // #12 : Update marker popup content on changing it's position
+        markerO.on("dragend",function(e){
+            geocodeService.reverse().latlng(e.target.getLatLng()).run(function (error, res) {
+                markerO.bindPopup(e.target.getLatLng().toString()).openPopup();
+                if (markerO == markerArray[0]){
+                    document.getElementById("IcountryD").value = res.address.CountryCode;
+                    document.getElementById("IcityD").value = res.address.City;
+                    document.getElementById("Ito").value = res.address.Address;
+                    document.getElementById("PCto").value = res.address.Postal;
+                } else {
+                    console.log(markerO);
+                    console.log(markerArray[0]);
+                    document.getElementById("IcountryF").value = res.address.CountryCode;
+                    document.getElementById("IcityF").value = res.address.City;
+                    document.getElementById("Ifrom").value = res.address.Address;
+                    document.getElementById("PCfrom").value = res.address.Postal;
+                }
+            });
+        });
+
+        markerArray.push(markerO)
+
+        document.getElementById('IcountryF').value = data.countryFrom;
+        document.getElementById('IcityF').value = data.cityFrom;
+        document.getElementById('Ifrom').value = data.originAddress;
+        document.getElementById('Idate').value = data.date;
+        document.getElementById('PCfrom').value = data.postCodeFrom;
+        document.getElementById('PCto').value = data.postCodeTo;
+        document.getElementById('Itext').value = data.details;
+        document.getElementById('Iphone').value = data.phone;
+        document.getElementById('IcountryD').value = data.countryTo;
+        document.getElementById('IcityD').value = data.cityTo;
+        document.getElementById('Ito').value = data.destinationAddress;
+        document.getElementById('Isurname').value = data.surname;
+        document.getElementById('Iname').value = data.name;
+        document.getElementById('Imail').value = data.mail;
+
+        nMarkers = 2;
+    }
+}
+
+window.onload = async function() {
+    fetch('/api/deliveries/', {
+        method: 'GET'
+    }).then((res) => {
+        return res.json();
+    }).then((data) => {
+        console.log(data);
+        updateDeliveries(data[0]);
+        packageId = data[0].id;
+    }).then(error => console.log(error));
+}
+
+function updatePackage(e) {
+    e.preventDefault();
+
+    var countryFrom = document.getElementById('IcountryF').value;
+    var cityFrom = document.getElementById('IcityF').value;
+    var postCodeFrom = document.getElementById('PCfrom').value;
+    var originAddress = document.getElementById('Ifrom').value;
+    var date = document.getElementById('Idate').value;
+    var details = document.getElementById('Itext').value;
+    var phone = document.getElementById('Iphone').value;
+    var countryTo = document.getElementById('IcountryD').value;
+    var cityTo = document.getElementById('IcityD').value;
+    var postCodeTo = document.getElementById('PCto').value;
+    var destinationAddress = document.getElementById('Ito').value;
+    var surname = document.getElementById('Isurname').value;
+    var name = document.getElementById('Iname').value;
+    var mail = document.getElementById('Imail').value;
+    var destinationLatlng = markerArray[0]._latlng;
+    var originLatlng = markerArray[1]._latlng;
+
+    data = {countryFrom, cityFrom, postCodeFrom, originAddress, originLatlng, date, details, phone, countryTo, countryFrom, cityTo, postCodeTo, destinationAddress, destinationLatlng, surname, name, mail}
+
+    options = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept' : 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+    console.log("package id below");
+    console.log(packageId);
+    fetch(`/api/deliveries/${packageId}`, options
+    ).then((res) => {
+        return res.json();
+    });
+
+    clearForm();
+}
 
 btnOr.addEventListener('click', geocodeOriginBtn);
 btnDst.addEventListener('click', geocodeDestBtn);
+btnUpdate.addEventListener('click', updatePackage);
 
 map.on('click', onMapClick);
