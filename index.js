@@ -3,7 +3,7 @@ const { request } = require('http');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-app.listen(3001, () => {
+app.listen(process.env.PORT || 3001, () => {
     console.log('listening at 3001')
 })
 
