@@ -11,8 +11,10 @@ app.use(express.json());
 
 points = [];
 
+depot = {lat: 52.22926000000007, lng: 21.012440000000026}
+cap = 15
+
 app.post('/api', (req, res) => {
-    console.log(req);
     req.body.id = uuidv4();
     points.push(req.body);
     console.log(points);
@@ -30,10 +32,50 @@ app.put('/api/deliveries/:id', (req, res) => {
     console.log(delIndex);
 
     points[delIndex] = {...req.body, id: points[delIndex].id};
-    // TODO: update this point
+
     console.log(points);
     
-
-    res.send("Updated");
+    return res.send("Updated");
 });
 
+app.get('/api/routes/origin', (req, res) => {
+    latlngs = [depot]
+    var tmp_weight = 0
+    points.forEach(point => {
+        if (parseInt(point.weight) > cap){
+            res.status(422).send('Too big package!')
+        }
+        tmp_weight += parseInt(point.weight);
+        if (tmp_weight > cap) {
+            latlngs.push(depot)
+            tmp_weight = 0
+        }
+        latlngs.push(point.originLatlng)
+    });
+
+    latlngs.push(depot)
+
+    return res.json(latlngs)
+})
+
+app.get('/api/routes/destination', (req, res) => {
+    latlngs = [depot]
+    var tmp_weight = 0
+    points.forEach(point => {
+        if (parseInt(point.weight) > cap){
+            res.status(422).send('Too big package!')
+        }
+
+        tmp_weight += parseInt(point.weight);
+        if (tmp_weight > cap) {
+            latlngs.push(depot)
+            tmp_weight = 0
+        }
+        // add weight
+        latlngs.push(point.destinationLatlng)
+    });
+
+    latlngs.push(depot)
+
+    return res.json(latlngs)
+})

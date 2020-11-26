@@ -19,10 +19,10 @@ var nMarkers = 0;
 var pointFrom;
 var pointTo;
 var packageId;
+var polyline;
 
 function onMapClick(e) {
     
-    if(nMarkers < 2) {
         geocodeService.reverse().latlng(e.latlng).run(function (error, result) {
             if (error) {
               return;
@@ -33,7 +33,7 @@ function onMapClick(e) {
             var City = result.address.City;
             var postalCode = result.address.Postal;
 
-            if(nMarkers == 1) {
+            if(nMarkers % 2) {
                 document.getElementById("IcountryF").value = countryCode;
                 document.getElementById("IcityF").value = City;
                 document.getElementById("Ifrom").value = street;
@@ -46,15 +46,17 @@ function onMapClick(e) {
             }
 
             nMarkers++;
-
+            console.log(result.latlng);
             var marker = L.marker(result.latlng, {
                     draggable:true,
                     title:"Resource location",
                     alt:"Resource Location",
                     riseOnHover:true
                     }).on('click', markerOnClick)
-                    .addTo(map)
-                    .bindPopup(result.address.Match_addr).openPopup();
+                    .bindPopup(result.address.Match_addr).openPopup()
+                    // .on('dragstart', dragStartHandler)
+                    // .on('drag', dragHandler)
+                    .addTo(map);
 
             markerArray.push(marker)
 
@@ -74,9 +76,9 @@ function onMapClick(e) {
                         document.getElementById("PCfrom").value = res.address.Postal;
                     }
                 });
+                delete this.polylineLatlng;
             });
         });
-    }
 }
 
 function markerOnClick(e) {
@@ -134,15 +136,16 @@ function geocodeOriginBtn(){
         }
         console.log(results.results[0]);
 
-        if (nMarkers < 2) {
             var marker = L.marker(results.results[0].latlng, {
             draggable:true,
             title:"Resource location",
             alt:"Resource Location",
             riseOnHover:true
             }).on('click', markerOnClick)
-            .addTo(map)
-            .bindPopup(results.results[0].text).openPopup();
+            .bindPopup(results.results[0].text).openPopup()
+            // .on('dragstart', dragStartHandler)
+            // .on('drag', dragHandler)
+            .addTo(map);
 
             markerArray.push(marker);
             nMarkers++;
@@ -163,8 +166,8 @@ function geocodeOriginBtn(){
                         document.getElementById("PCfrom").value = res.address.Postal;
                     }
                 });
+                delete this.polylineLatlng;
             });
-        }
       });
 }
 
@@ -185,49 +188,52 @@ function geocodeDestBtn(){
         }
         console.log(results);
 
-        if (nMarkers < 2) {
-            var marker = L.marker(results.results[0].latlng, {
-            draggable:true,
-            title:"Resource location",
-            alt:"Resource Location",
-            riseOnHover:true
-            }).on('click', markerOnClick)
-            .addTo(map)
-            .bindPopup(results.results[0].text).openPopup();
+        var marker = L.marker(results.results[0].latlng, {
+        draggable:true,
+        title:"Resource location",
+        alt:"Resource Location",
+        riseOnHover:true
+        }).on('click', markerOnClick)
+        .bindPopup(results.results[0].text).openPopup()
+        // .on('dragstart', dragStartHandler)
+        // .on('drag', dragHandler)
+        .addTo(map);
 
-            markerArray.push(marker);
-            nMarkers++;
-            console.log(markerArray.length)
+        markerArray.push(marker);
+        console.log(markerArray.length)
 
-            marker.on("dragend",function(e){
-                geocodeService.reverse().latlng(e.target.getLatLng()).run(function (error, res) {
-                    marker.bindPopup(e.target.getLatLng().toString()).openPopup();
-                    if (marker == markerArray[0]){
-                        document.getElementById("IcountryD").value = res.address.CountryCode;
-                        document.getElementById("IcityD").value = res.address.City;
-                        document.getElementById("Ito").value = res.address.Address;
-                        document.getElementById("PCto").value = res.address.Postal;
-                    } else {
-                        document.getElementById("IcountryF").value = res.address.CountryCode;
-                        document.getElementById("IcityF").value = res.address.City;
-                        document.getElementById("Ifrom").value = res.address.Address;
-                        document.getElementById("PCfrom").value = res.address.Postal;
-                    }
-                });
+        marker.on("dragend",function(e){
+            geocodeService.reverse().latlng(e.target.getLatLng()).run(function (error, res) {
+                marker.bindPopup(e.target.getLatLng().toString()).openPopup();
+                if (marker == markerArray[0]){
+                    document.getElementById("IcountryD").value = res.address.CountryCode;
+                    document.getElementById("IcityD").value = res.address.City;
+                    document.getElementById("Ito").value = res.address.Address;
+                    document.getElementById("PCto").value = res.address.Postal;
+                } else {
+                    document.getElementById("IcountryF").value = res.address.CountryCode;
+                    document.getElementById("IcityF").value = res.address.City;
+                    document.getElementById("Ifrom").value = res.address.Address;
+                    document.getElementById("PCfrom").value = res.address.Postal;
+                }
+                delete this.polylineLatlng;
             });
-        }
+        });
+
     });
 }
 
 document.getElementById("fixedForm").addEventListener("submit", (e) => {
     e.preventDefault();
 
+    var lenMarkerArray = markerArray.length;
+
     var countryFrom = document.getElementById('IcountryF').value;
     var cityFrom = document.getElementById('IcityF').value;
     var postCodeFrom = document.getElementById('PCfrom').value;
     var originAddress = document.getElementById('Ifrom').value;
     var date = document.getElementById('Idate').value;
-    var details = document.getElementById('Itext').value;
+    var weight = document.getElementById('Itext').value;
     var phone = document.getElementById('Iphone').value;
     var countryTo = document.getElementById('IcountryD').value;
     var cityTo = document.getElementById('IcityD').value;
@@ -236,10 +242,10 @@ document.getElementById("fixedForm").addEventListener("submit", (e) => {
     var surname = document.getElementById('Isurname').value;
     var name = document.getElementById('Iname').value;
     var mail = document.getElementById('Imail').value;
-    var destinationLatlng = markerArray[0]._latlng;
-    var originLatlng = markerArray[1]._latlng;
+    var destinationLatlng = markerArray[lenMarkerArray - 2]._latlng;
+    var originLatlng = markerArray[lenMarkerArray - 1]._latlng;
 
-    data = {countryFrom, cityFrom, postCodeFrom, originAddress, originLatlng, date, details, phone, countryTo, countryFrom, cityTo, postCodeTo, destinationAddress, destinationLatlng, surname, name, mail}
+    data = {countryFrom, cityFrom, postCodeFrom, originAddress, originLatlng, date, weight, phone, countryTo, countryFrom, cityTo, postCodeTo, destinationAddress, destinationLatlng, surname, name, mail}
 
     options = {
         method: 'POST',
@@ -265,12 +271,10 @@ document.getElementById("fixedForm").addEventListener("submit", (e) => {
             }
         }).catch(error => {
             console.log(error);
-        });
+    });
 });
 
 function updateDeliveries(data) {
-
-    markerArray = [];
 
     if (data) {
         var markerD = L.marker(L.latLng(
@@ -282,6 +286,8 @@ function updateDeliveries(data) {
             alt:"Resource Location",
             riseOnHover:true
             }).on('click', markerOnClick)
+            // .on('dragstart', dragStartHandler)
+            // .on('drag', dragHandler)
             .addTo(map);
             //.bindPopup(data.destinationLatlng).openPopup();
 
@@ -301,6 +307,7 @@ function updateDeliveries(data) {
                     document.getElementById("PCfrom").value = res.address.Postal;
                 }
             });
+            delete this.polylineLatlng;
         });
 
         markerArray.push(markerD)
@@ -314,8 +321,9 @@ function updateDeliveries(data) {
             alt:"Resource Location",
             riseOnHover:true
             }).on('click', markerOnClick)
+            // .on('dragstart', dragStartHandler)
+            // .on('drag', dragHandler)
             .addTo(map);
-            //.bindPopup(data.originLatlng).openPopup();
 
         // #12 : Update marker popup content on changing it's position
         markerO.on("dragend",function(e){
@@ -335,9 +343,11 @@ function updateDeliveries(data) {
                     document.getElementById("PCfrom").value = res.address.Postal;
                 }
             });
+            delete this.polylineLatlng;
         });
 
         markerArray.push(markerO)
+        console.log(markerArray);
 
         document.getElementById('IcountryF').value = data.countryFrom;
         document.getElementById('IcityF').value = data.cityFrom;
@@ -345,7 +355,7 @@ function updateDeliveries(data) {
         document.getElementById('Idate').value = data.date;
         document.getElementById('PCfrom').value = data.postCodeFrom;
         document.getElementById('PCto').value = data.postCodeTo;
-        document.getElementById('Itext').value = data.details;
+        document.getElementById('Itext').value = data.weight;
         document.getElementById('Iphone').value = data.phone;
         document.getElementById('IcountryD').value = data.countryTo;
         document.getElementById('IcityD').value = data.cityTo;
@@ -353,8 +363,6 @@ function updateDeliveries(data) {
         document.getElementById('Isurname').value = data.surname;
         document.getElementById('Iname').value = data.name;
         document.getElementById('Imail').value = data.mail;
-
-        nMarkers = 2;
     }
 }
 
@@ -365,7 +373,9 @@ window.onload = async function() {
         return res.json();
     }).then((data) => {
         console.log(data);
-        updateDeliveries(data[0]);
+
+        data.forEach(package => updateDeliveries(package));
+        // UPDATES ONLY FIRST PACKAGE
         packageId = data[0].id;
     }).then(error => console.log(error));
 }
@@ -373,12 +383,14 @@ window.onload = async function() {
 function updatePackage(e) {
     e.preventDefault();
 
+    var lenMarkerArray = markerArray.length;
+
     var countryFrom = document.getElementById('IcountryF').value;
     var cityFrom = document.getElementById('IcityF').value;
     var postCodeFrom = document.getElementById('PCfrom').value;
     var originAddress = document.getElementById('Ifrom').value;
     var date = document.getElementById('Idate').value;
-    var details = document.getElementById('Itext').value;
+    var weight = document.getElementById('Itext').value;
     var phone = document.getElementById('Iphone').value;
     var countryTo = document.getElementById('IcountryD').value;
     var cityTo = document.getElementById('IcityD').value;
@@ -387,10 +399,10 @@ function updatePackage(e) {
     var surname = document.getElementById('Isurname').value;
     var name = document.getElementById('Iname').value;
     var mail = document.getElementById('Imail').value;
-    var destinationLatlng = markerArray[0]._latlng;
-    var originLatlng = markerArray[1]._latlng;
+    var destinationLatlng = markerArray[lenMarkerArray - 2]._latlng;
+    var originLatlng = markerArray[lenMarkerArray - 1]._latlng;
 
-    data = {countryFrom, cityFrom, postCodeFrom, originAddress, originLatlng, date, details, phone, countryTo, countryFrom, cityTo, postCodeTo, destinationAddress, destinationLatlng, surname, name, mail}
+    data = {countryFrom, cityFrom, postCodeFrom, originAddress, originLatlng, date, weight, phone, countryTo, countryFrom, cityTo, postCodeTo, destinationAddress, destinationLatlng, surname, name, mail}
 
     options = {
         method: 'PUT',
@@ -409,6 +421,70 @@ function updatePackage(e) {
 
     clearForm();
 }
+
+document.getElementById("btnOriginRoutes").addEventListener('click', (e) => {
+    fetch('/api/routes/origin', {
+        method: 'GET'
+    }).then((res) => {
+        return res.json();
+    }).then((data) => {
+        console.log(data);
+
+    polyline = L.polyline(data, {color : 'red', className : 'animate'}).addTo(map);
+
+    }).then(error => console.log(error));
+
+});
+
+
+document.getElementById("btnDestinationRoutes").addEventListener('click', (e) => {
+    fetch('/api/routes/destination', {
+        method: 'GET'
+    }).then((res) => {
+        return res.json();
+    }).then((data) => {
+        console.log(data);
+
+    polyline = L.polyline(data, {color : 'green', className : 'animate'}).addTo(map);
+
+    }).then(error => console.log(error));
+
+});
+
+// function dragStartHandler (e) {
+
+//     // Get the polyline's latlngs
+//     var latlngs = polyline.getLatLngs(),
+
+//         // Get the marker's start latlng
+//         latlng = this.getLatLng();
+
+//     // Iterate the polyline's latlngs
+//     for (var i = 0; i < latlngs.length; i++) {
+
+//         // Compare each to the marker's latlng
+//         if (latlng.equals(latlngs[i])) {
+
+//             // If equals store key in marker instance
+//             this.polylineLatlng = i;
+//         }
+//     }
+// }
+
+// function dragHandler (e) {
+
+//     // Get the polyline's latlngs
+//     var latlngs = polyline.getLatLngs(),
+
+//         // Get the marker's current latlng
+//         latlng = this.getLatLng();
+
+//     // Replace the old latlng with the new
+//     latlngs.splice(this.polylineLatlng, 1, latlng);
+
+//     // Update the polyline with the new latlngs
+//     polyline.setLatLngs(latlngs);
+// }
 
 btnOr.addEventListener('click', geocodeOriginBtn);
 btnDst.addEventListener('click', geocodeDestBtn);

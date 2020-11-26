@@ -45,20 +45,20 @@
                 <img src="/ico/icon.svg" width="30" height="30" class="d-inline-block align-top" alt=""> Package Handling Web App
             </a>
 
-            <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> -->
 
-            <div class="collapse navbar-collapse" id="navbarsExample01">
+            <!-- <div class="collapse navbar-collapse" id="navbarsExample01">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Add new package<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Show/hide origin routes<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Edit existing package</a>
+                        <a class="nav-link" href="#">Show/hide destination routes</a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </nav>
 
@@ -69,25 +69,27 @@
         <div id="geoForm">
             <button id="geocodeOrigin" type="button">Geocode Origin</button><br>
             <button id="geocodeDest" type="button">Geocode Destination</button><br>
+            <button id="btnOriginRoutes" type="button" >Show origin routes</button>
+            <button id="btnDestinationRoutes" type="button" >Show destination routes</button>
         </div>
         <form id="fixedForm" class="shadow-lg p-3 mb-5 rounded">
             <div class="columnForm">
-                <input type="text" class="inputHalf" id="IcountryF" name="IcountryF" placeholder="Country"required>
-                <input type="text" class="inputHalf" id="IcityF" name="IcityF" placeholder="City"required><br>
-                <input type="text" id="Ifrom" name="Ifrom" placeholder="Address from" required><br>
-                <input type="text" id="PCfrom" name="PCfrom" placeholder="ZIP" required><br>
-                <input type="date" id="Idate" name="IDate" placeholder="Date" required><br>
-                <input type="text" id="Itext" name="Itext" placeholder="Details"><br>
-                <input type="tel" id="Iphone" name="Iphone" placeholder="Phone" required>
+                <input type="text" class="inputHalf" id="IcountryF" name="IcountryF" placeholder="Country">
+                <input type="text" class="inputHalf" id="IcityF" name="IcityF" placeholder="City"><br>
+                <input type="text" id="Ifrom" name="Ifrom" placeholder="Address from" ><br>
+                <input type="text" id="PCfrom" name="PCfrom" placeholder="ZIP" ><br>
+                <input type="date" id="Idate" name="IDate" placeholder="Date" ><br>
+                <input type="number" id="Itext" name="Itext" placeholder="Weight[kg]"><br>
+                <input type="tel" id="Iphone" name="Iphone" placeholder="Phone" >
             </div>
             <div class="columnForm">
-                <input type="text" class="inputHalf" id="IcountryD" name="IcountryD" placeholder="Country"required>
-                <input type="text" class="inputHalf" id="IcityD" name="IcityD" placeholder="City"required><br>
-                <input type="text" id="Ito" name="Ito" placeholder="Address to" required><br>
-                <input type="text" id="PCto" name="PCto" placeholder="ZIP" required><br>
-                <input type="text" id="Iname" name="Iname" placeholder="Name" required><br>
-                <input type="text" id="Isurname" name="Isurname" placeholder="Surame" required><br>
-                <input type="email" id="Imail" name="Imail" placeholder="Email" required><br>
+                <input type="text" class="inputHalf" id="IcountryD" name="IcountryD" placeholder="Country">
+                <input type="text" class="inputHalf" id="IcityD" name="IcityD" placeholder="City"><br>
+                <input type="text" id="Ito" name="Ito" placeholder="Address to"><br>
+                <input type="text" id="PCto" name="PCto" placeholder="ZIP" ><br>
+                <input type="text" id="Iname" name="Iname" placeholder="Name" ><br>
+                <input type="text" id="Isurname" name="Isurname" placeholder="Surame" ><br>
+                <input type="email" id="Imail" name="Imail" placeholder="Email" ><br>
             </div>
             <button id="btnSubmit" type="submit" >Submit</button>
             <button id="btnUpdate" type="submit" >Update</button>

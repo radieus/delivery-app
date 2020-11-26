@@ -75,7 +75,7 @@ input:focus {
 
 /*With a widht of 95% this button ends at the same time the inputs do*/
 
-#btnSubmit, #btnUpdate, #geocodeOrigin, #geocodeDest{
+#btnSubmit, #btnUpdate, #geocodeOrigin, #geocodeDest, #btnDestinationRoutes, #btnOriginRoutes{
     display: inline-block;
     width: 95%;
     border: none;
@@ -87,11 +87,11 @@ input:focus {
     outline: none;
 }
 
-#btnSubmit:hover, #btnUpdate:hover, #geocodeOrigin:hover, #geocodeDest:hover {
+#btnSubmit:hover, #btnUpdate:hover, #geocodeOrigin:hover, #geocodeDest:hover, #btnDestinationRoutes:hover, #btnOriginRoutes:hover{
     background-color:	#4F2F42;
 }
 
-#btnSubmit:active, #btnUpdate:active, #geocodeOrigin:active, #geocodeDest:active {
+#btnSubmit:active, #btnUpdate:active, #geocodeOrigin:active, #geocodeDest:active, #btnDestinationRoutes:active, #btnOriginRoutes:active{
     background-color: darkslategray;
 }
 
@@ -102,7 +102,6 @@ input:focus {
     background-color: darkslategray;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-
 
 /*Without it collapsed panel immediately disappears*/
 
@@ -197,4 +196,16 @@ a:hover {
 .popupCustom .leaflet-popup-content-wrapper {
     background: #e0e0e0;
     color: #234c5e;
+}
+
+path.leaflet-interactive.animate {
+    stroke-dasharray: 1920;
+    stroke-dashoffset: 1920;
+    animation: dash 20s linear 3s forwards;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
 }
